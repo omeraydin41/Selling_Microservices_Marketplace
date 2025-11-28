@@ -149,7 +149,7 @@ namespace EventBus.AzureServiceBus
             {
                 var rule = managementClient.GetRuleAsync(
                     EventBusConfig.DefaultTopicName,
-                    eventName,
+                    getSubName( eventName),
                     eventName
                 ).GetAwaiter().GetResult(); // Rule var mı kontrol et
                 ruleExists = rule != null; // Varsa true

@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# CA1711: Tanımlayıcılar yanlış son ek içermemelidir
+dotnet_diagnostic.CA1711.severity = none

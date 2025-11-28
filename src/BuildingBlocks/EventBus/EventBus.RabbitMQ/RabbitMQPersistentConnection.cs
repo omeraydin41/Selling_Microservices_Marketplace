@@ -9,62 +9,64 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using IModel = RabbitMQ.Client.IModel;
+
 
 namespace EventBus.RabbitMQ
 {
-    public class RabbitMQPersistentConnection : IDisposable //amacı, bir nesne tarafından kullanılan yönetilemeyen kaynakları (unmanaged resources) serbest bırakmaktır.
+    public class RabbitMQPersistentConnection : IDisposable
     {
-        private readonly IConnectionFactory connectionFactory;//bağlantı fabrikası : rabbitmq bağlantısı oluşturmak için kullanılır
-        private readonly int retryCount;//bağlantı deneme sayısı
-        private IConnection connection;//hangı bağlantı açık veya değil kontrol eder 
-        private object lock_object = new object();//çoklu thread ler için kilit mekanizması sağlar
-        private bool _disposed;//nesnenin dispose edilip edilmediğini takip eder
-        public RabbitMQPersistentConnection(ConnectionFactory connectionFactory,int retryCount=5)
+        private readonly IConnectionFactory connectionFactory;
+        private readonly int retryCount;
+        private IConnection connection;
+        private object lock_object = new object();
+        private bool _disposed;
+
+
+        public RabbitMQPersistentConnection(IConnectionFactory connectionFactory, int retryCount = 5)
         {
-            this.connectionFactory= connectionFactory;
+            this.connectionFactory = connectionFactory;
+            this.retryCount = retryCount;
         }
 
-        public bool IConnection => connection != null && connection.IsOpen;//bağlantının kapalı olmamaıs lazım ve açık olması lazım
+        public bool IsConnected => connection != null && connection.IsOpen;
 
-        public bool IsConnected { get; private set; }
 
-        //public IModel CreateModel()
-        //{
-
-        //    return connection.CreateModel();
-
-        //}
+        public IModel CreateModel()
+        {
+            return connection.CreateModel();
+        }
 
         public void Dispose()
         {
+            _disposed = true;
             connection.Dispose();
-            _disposed = true;   
         }
+
+
         public bool TryConnect()
         {
             lock (lock_object)
             {
                 var policy = Policy.Handle<SocketException>()
                     .Or<BrokerUnreachableException>()
-                    .WaitAndRetry(
-                        retryCount,
-                        retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
-                        (ex, time) =>
-                        {
-                            // log
-                        }
-                    );
+                    .WaitAndRetry(retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), (ex, time) =>
+                    {
+                    }
+                );
 
                 policy.Execute(() =>
                 {
-                    //connection = connectionFactory.CreateConnection();
+                    connection = connectionFactory.CreateConnection();
                 });
 
                 if (IsConnected)
                 {
-                   // connection.ConnectionShutdownAsync += connection_ConnectionShutdown;
-                    connection.CallbackExceptionAsync += connection_CallbackException;
-                    connection.ConnectionBlockedAsync += connection_ConnectionBlocked;
+                    connection.ConnectionShutdown += Connection_ConnectionShutdown;
+                    connection.CallbackException += Connection_CallbackException;
+                    connection.ConnectionBlocked += Connection_ConnectionBlocked;
+                    // log
+
                     return true;
                 }
 
@@ -72,24 +74,27 @@ namespace EventBus.RabbitMQ
             }
         }
 
-        private async Task connection_ConnectionBlocked(object sender, ConnectionBlockedEventArgs @event)
+        private void Connection_ConnectionBlocked(object sender, global::RabbitMQ.Client.Events.ConnectionBlockedEventArgs e)
         {
-            if (!_disposed) return;
-                TryConnect();
-        }
+            if (_disposed) return;
 
-        private async Task connection_CallbackException(object sender, CallbackExceptionEventArgs @event)
-        {
             TryConnect();
         }
 
-        private void connection_ConnectionShutdown()
+        private void Connection_CallbackException(object sender, global::RabbitMQ.Client.Events.CallbackExceptionEventArgs e)
         {
+            if (_disposed) return;
+
             TryConnect();
         }
 
-      
+        private void Connection_ConnectionShutdown(object sender, ShutdownEventArgs e)
+        {
+            // log Connection_ConnectionShutdown
+
+            if (_disposed) return;
+
+            TryConnect();
+        }
     }
-
-   
 }

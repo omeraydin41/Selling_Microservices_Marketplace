@@ -27,7 +27,6 @@ namespace EventBus.Base.SubManager
         public string EventNameSuffix { get; set; } = "IntegrationEvent";
         // Olay (Event) adının sonuna eklenecek dizedir (Örn: "IntegrationEvent").
 
-        public EventBusType EventBusTyp { get; set; } = EventBusType.RabbitMQ;
         //default olarak rabbitmq kullanacak
 
         public object Connection { get; set; }
@@ -38,6 +37,7 @@ namespace EventBus.Base.SubManager
         public bool DeleteEventPrefix => !String.IsNullOrEmpty(EventNamePrefix);
 
         public bool DeleteEventSuffix => !String.IsNullOrEmpty(EventNameSuffix);
+        public EventBusType EventBusTyp { get; set; } = EventBusType.RabbitMQ;
 
         public enum EventBusType
         {

@@ -66,6 +66,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PaymentService", "PaymentSe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentService.Api", "src\Services\PaymentService\PaymentService.Api\PaymentService.Api.csproj", "{0F18E71B-C6C4-465D-8CBE-35CF69B4F431}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{06C0319C-9643-4423-815A-29CE2D37E223}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildingBlocks", "BuildingBlocks", "{E41E6B81-F4C7-46B4-A57E-CA47B94C36F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventBus.UnitTest", "Test\BuildingBlocks\EventBus.UnitTest\EventBus.UnitTest.csproj", "{E93980EC-B6FC-4E83-BEEB-C053FBC6FEDD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{000B413F-037E-4524-BC98-13D77544B237}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -132,6 +143,10 @@ Global
 		{0F18E71B-C6C4-465D-8CBE-35CF69B4F431}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F18E71B-C6C4-465D-8CBE-35CF69B4F431}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F18E71B-C6C4-465D-8CBE-35CF69B4F431}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E93980EC-B6FC-4E83-BEEB-C053FBC6FEDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E93980EC-B6FC-4E83-BEEB-C053FBC6FEDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E93980EC-B6FC-4E83-BEEB-C053FBC6FEDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E93980EC-B6FC-4E83-BEEB-C053FBC6FEDD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -165,6 +180,8 @@ Global
 		{CB1480B4-463A-4EF3-ABF7-448A8C3499F7} = {D2603194-ED70-4121-A33F-80BE34A710C6}
 		{5F05450C-071B-459B-919C-BA174BD7FAC8} = {5E473146-3C60-4EC9-8D42-1BE0D3BD46A2}
 		{0F18E71B-C6C4-465D-8CBE-35CF69B4F431} = {5F05450C-071B-459B-919C-BA174BD7FAC8}
+		{E41E6B81-F4C7-46B4-A57E-CA47B94C36F6} = {06C0319C-9643-4423-815A-29CE2D37E223}
+		{E93980EC-B6FC-4E83-BEEB-C053FBC6FEDD} = {E41E6B81-F4C7-46B4-A57E-CA47B94C36F6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AAD0C271-ADEE-44B6-BA48-CE0FA5F45FE8}
