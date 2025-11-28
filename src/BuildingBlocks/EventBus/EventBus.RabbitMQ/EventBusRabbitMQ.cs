@@ -1,17 +1,12 @@
 ﻿using EventBus.Base.Events;
 using EventBus.Base.SubManager;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Newtonsoft.Json;
 using Polly;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading.Tasks;
 using IModel = RabbitMQ.Client.IModel;
 
 namespace EventBus.RabbitMQ
@@ -23,6 +18,7 @@ namespace EventBus.RabbitMQ
         private readonly IConnectionFactory connectionFactory;
 
         private readonly IModel consumerChannel;
+     
 
  
 
@@ -95,15 +91,15 @@ namespace EventBus.RabbitMQ
                 var properties = consumerChannel.CreateBasicProperties();
                 properties.DeliveryMode = 2; // persistent
 
-                //consumerChannel.QueueDeclare(queue: GetSubName(eventName), // Ensure queue exists while publishing
-                //                     durable: true,
-                //                     exclusive: false,
-                //                     autoDelete: false,
-                //                     arguments: null);
+                consumerChannel.QueueDeclare(queue: getSubName(eventName), // Ensure queue exists while publishing
+                                     durable: true,
+                                     exclusive: false,
+                                     autoDelete: false,
+                                     arguments: null);
 
-                //consumerChannel.QueueBind(queue: GetSubName(eventName),
-                //                  exchange: EventBusConfig.DefaultTopicName,
-                //                  routingKey: eventName);
+                consumerChannel.QueueBind(queue: getSubName(eventName),
+                                  exchange: EventBusConfig.DefaultTopicName,
+                                  routingKey: eventName);
 
                 consumerChannel.BasicPublish(
                     exchange: EventBusConfig.DefaultTopicName,
