@@ -104,6 +104,10 @@ namespace EventBus.RabbitMQ
                 //                 routingKey: eventName);
 
                 consumerChannel.QueueBind(queue: getSubName(eventName),
+                                 exchange: EventBusConfig.DefaultTopicName,
+                                 routingKey: eventName);
+
+                consumerChannel.QueueBind(queue: getSubName(eventName),
                                   exchange: EventBusConfig.DefaultTopicName,
                                   routingKey: eventName);
 
