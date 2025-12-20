@@ -5,12 +5,12 @@ namespace PaymentService.Api.IntegrationEvents.Events
     {
         public Guid OrderId { get; set; }//hangı orderin basladıgını bilmek ıcın
 
-        public OrderStartedIntegrationEvent()
+        public OrderStartedIntegrationEvent(string userName)
         {
 
         }
 
-        public OrderStartedIntegrationEvent(Guid orderId)//order ıd yı dışardan da alabılırız 
+        public OrderStartedIntegrationEvent(string userName, Guid orderId)//order ıd yı dışardan da alabılırız 
         {
             OrderId = orderId;
         }
